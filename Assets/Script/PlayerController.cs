@@ -7,7 +7,9 @@ public class PlayerController : MonoBehaviour
     public float moveCurrentV;
     public float moveCurrentH;
     Vector2 moveFinal;
-    public float moveSpeed = 2f;
+    public float addVelocity = 2f;
+    public float rmVelocity = 2f;
+
     public Rigidbody2D rb;
     Vector2 control;
   
@@ -47,7 +49,7 @@ public class PlayerController : MonoBehaviour
         moveFinal.x = moveCurrentH;
         moveFinal.y = moveCurrentV;
 
-        rb.MovePosition(rb.position + control * moveFinal * Time.fixedDeltaTime);
+        rb.MovePosition(rb.position + moveFinal * Time.fixedDeltaTime);
 
 
         
@@ -58,21 +60,21 @@ public class PlayerController : MonoBehaviour
         //se pressionar para horizontal aumentar velocidade
         if(control.x > 0)
         {
-            moveCurrentH += Time.deltaTime;
+            moveCurrentH += addVelocity * Time.deltaTime;
         }
        else if (control.x < 0)
         {
-            moveCurrentH -= Time.deltaTime;
+            moveCurrentH -= addVelocity *  Time.deltaTime;
         }
 
         //se pressionar para vertical aumentar a velocidade
         if (control.y > 0)
         {
-            moveCurrentV += Time.deltaTime;
+            moveCurrentV += addVelocity * Time.deltaTime;
         }
         else if (control.y < 0)
         {
-            moveCurrentV -= Time.deltaTime;
+            moveCurrentV -= addVelocity *  Time.deltaTime;
         }
     }
     
@@ -84,14 +86,30 @@ public class PlayerController : MonoBehaviour
 
             if(moveCurrentH > 0)
             {
-                moveCurrentH -= Time.deltaTime;
+                moveCurrentH -= rmVelocity * Time.deltaTime;
             }
             else if(moveCurrentH < 0)
             {
-                moveCurrentH += Time.deltaTime;
+                moveCurrentH += rmVelocity *  Time.deltaTime;
             }
 
            
+        }
+
+        //se não pressionar para vertical decrementar velocidade
+        if (control.y == 0)
+        {
+
+            if (moveCurrentV > 0)
+            {
+                moveCurrentV -= rmVelocity * Time.deltaTime;
+            }
+            else if (moveCurrentV < 0)
+            {
+                moveCurrentV += rmVelocity *  Time.deltaTime;
+            }
+
+
         }
 
 
