@@ -14,10 +14,10 @@ public class RotationPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Rotation();
+        RotationP();
     }
 
-    void Rotation()
+    void RotationP()
     {
         //pega a posição do mouse
         Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10);
