@@ -5,6 +5,7 @@ using UnityEngine.UI;
 //Imports da Photon 2
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine.SceneManagement;
 
 public class NertworkController : MonoBehaviourPunCallbacks
 {
@@ -81,6 +82,7 @@ public class NertworkController : MonoBehaviourPunCallbacks
         Debug.Log("AAAAAAAAAAAAAAEEEEEEEEE estou na room!");
         Debug.Log("Temos "+PhotonNetwork.CurrentRoom.PlayerCount+" Jogadores Disponiveis");
         HandleChangingWindows(windowConnection.Lobby, false);
+        SceneManager.LoadScene("Game");
     }
 
     public void ButtonClick()
