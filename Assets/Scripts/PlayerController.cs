@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
 public class PlayerController : MonoBehaviour
 {
@@ -12,25 +14,24 @@ public class PlayerController : MonoBehaviour
 
     public Rigidbody2D rb;
     Vector2 control;
-  
-  
+    PhotonView photonView;
 
     
     // Start is called before the first frame update
     void Start()
     {
-       
+        photonView = GetComponent<PhotonView>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        MoveInput();
-        IncreaseVelocity();
-        DecreaseVelocity();
-
-
-
+        if (photonView.IsMine)
+        {
+            MoveInput();
+            IncreaseVelocity();
+            DecreaseVelocity();
+        }
     }
 
     private void FixedUpdate()

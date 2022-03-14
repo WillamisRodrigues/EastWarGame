@@ -374,6 +374,7 @@ MonoBehaviour:
   roomInputName: {fileID: 398842722}
   loginWindow: {fileID: 371632869}
   lobbyWindow: {fileID: 1827083292}
+  myPlayer: {fileID: 4371641944448084470, guid: fbd9945d8dc561440a6805f2e0551faf, type: 3}
 --- !u!4 &297268385
 Transform:
   m_ObjectHideFlags: 0

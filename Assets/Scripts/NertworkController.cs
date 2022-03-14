@@ -23,6 +23,9 @@ public class NertworkController : MonoBehaviourPunCallbacks
     #region Aula 02
     bool isConected = false;
 
+    public GameObject myPlayer;
+
+
 
     private void Start()
     {
@@ -82,7 +85,8 @@ public class NertworkController : MonoBehaviourPunCallbacks
         Debug.Log("AAAAAAAAAAAAAAEEEEEEEEE estou na room!");
         Debug.Log("Temos "+PhotonNetwork.CurrentRoom.PlayerCount+" Jogadores Disponiveis");
         HandleChangingWindows(windowConnection.Lobby, false);
-        SceneManager.LoadScene("Game");
+        CreateNewPlayer();
+        
     }
 
     public void ButtonClick()
@@ -173,9 +177,11 @@ public class NertworkController : MonoBehaviourPunCallbacks
         }
     }
 
-
-
-
-
+    void CreateNewPlayer()
+    {
+        PhotonNetwork.Instantiate(myPlayer.name, myPlayer.transform.position, myPlayer.transform.rotation);
+        SceneManager.LoadScene("Game");
+    }
     #endregion
+
 }
