@@ -6,8 +6,10 @@ ScriptsOnlyBuild:
     - RotationPlayer
     Cinemachine.dll:
     - Cinemachine.CinemachineBrain
+    - Cinemachine.CinemachineComposer
     - Cinemachine.CinemachineFramingTransposer
     - Cinemachine.CinemachinePipeline
+    - Cinemachine.CinemachineTransposer
     - Cinemachine.CinemachineVirtualCamera
     PhotonUnityNetworking.Demos.dll:
     - Photon.Pun.Demo.Asteroids.Asteroid
@@ -19,6 +21,8 @@ ScriptsOnlyBuild:
     - Photon.Pun.Demo.PunBasics.PlayerUI
     - Photon.Pun.Demo.SlotRacer.PlayerControl
     - Photon.Pun.Demo.SlotRacer.Utils.SplineWalker
+    PhotonUnityNetworking.Editor.dll:
+    - Photon.Pun.PunSceneSettings
     PhotonUnityNetworking.dll:
     - Photon.Pun.PhotonAnimatorView
     - Photon.Pun.PhotonRigidbody2DView
@@ -30,8 +34,11 @@ ScriptsOnlyBuild:
     - UnityEditor.U2D.Animation.BoneGizmo
     Unity.2D.IK.Editor.dll:
     - UnityEditor.U2D.IK.IKEditorManager
+    - UnityEditor.U2D.IK.IKGizmos
     Unity.2D.Tilemap.Editor.dll:
     - UnityEditor.Tilemaps.GridPaintingState
+    - UnityEditor.Tilemaps.GridPaletteBrushes
+    - UnityEditor.Tilemaps.GridPalettes
     - UnityEditor.Tilemaps.SceneViewGridManager
     - UnityEditor.Tilemaps.SceneViewOpenTilePaletteHelper
     - UnityEditor.Tilemaps.TileDragAndDropManager
@@ -169,9 +176,15 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 2602}
     - Class: 114
+      Script: {instanceID: 2842}
+    - Class: 114
       Script: {instanceID: 2900}
     - Class: 114
+      Script: {instanceID: 2994}
+    - Class: 114
       Script: {instanceID: 3102}
+    - Class: 114
+      Script: {instanceID: 3200}
     - Class: 114
       Script: {instanceID: 3220}
     - Class: 114
@@ -189,7 +202,11 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 3818}
     - Class: 114
+      Script: {instanceID: 4406}
+    - Class: 114
       Script: {instanceID: 4472}
+    - Class: 114
+      Script: {instanceID: 4612}
     - Class: 114
       Script: {instanceID: 4926}
     - Class: 114
@@ -204,6 +221,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 5864}
     - Class: 114
       Script: {instanceID: 6064}
+    - Class: 114
+      Script: {instanceID: 6396}
     - Class: 114
       Script: {instanceID: 6548}
     - Class: 115
@@ -427,7 +446,7 @@ ScriptsOnlyBuild:
     className: Spaceship
   - hash:
       serializedVersion: 2
-      Hash: 181501e9ae1dbfef677b1de720ad6baf
+      Hash: bc409185a3fb73af9b250f6332a3b547
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: NertworkController

@@ -16,7 +16,9 @@ public class NertworkController : MonoBehaviourPunCallbacks
 
     public GameObject loginWindow;
     public GameObject lobbyWindow;
-    enum windowConnection {Login, Lobby};
+    public GameObject CanvasWindow;
+    public GameObject GameWindow;
+    enum windowConnection {Login, Lobby, Game, Canvas};
     enum statusConnection {EnteringLobby, EnterInLobby, EnterInLobbyFail}
     
     
@@ -32,6 +34,7 @@ public class NertworkController : MonoBehaviourPunCallbacks
         roomInputName.enabled = false;
         HandleChangingWindows(windowConnection.Login, true);
         HandleChangingWindows(windowConnection.Lobby, false);
+        HandleChangingWindows(windowConnection.Game, false);
         SetRandomPlayerName();
     }
 
@@ -85,8 +88,14 @@ public class NertworkController : MonoBehaviourPunCallbacks
         Debug.Log("AAAAAAAAAAAAAAEEEEEEEEE estou na room!");
         Debug.Log("Temos "+PhotonNetwork.CurrentRoom.PlayerCount+" Jogadores Disponiveis");
         HandleChangingWindows(windowConnection.Lobby, false);
+       
+        HandleChangingWindows(windowConnection.Login, false);
+        HandleChangingWindows(windowConnection.Lobby, false);
+        HandleChangingWindows(windowConnection.Canvas, false);
+        HandleChangingWindows(windowConnection.Game, true);
         CreateNewPlayer();
-        
+        // SceneManager.LoadScene("Game");
+
     }
 
     public void ButtonClick()
@@ -171,6 +180,14 @@ public class NertworkController : MonoBehaviourPunCallbacks
                 if (lobbyWindow != null)
                     lobbyWindow.SetActive(value);
                 break;
+            
+            case windowConnection.Game:
+                GameWindow.SetActive(value);
+                break;
+
+            case windowConnection.Canvas:
+                CanvasWindow.SetActive(value);
+                break;
 
             default:
                 break;
@@ -179,8 +196,7 @@ public class NertworkController : MonoBehaviourPunCallbacks
 
     void CreateNewPlayer()
     {
-        PhotonNetwork.Instantiate(myPlayer.name, myPlayer.transform.position, myPlayer.transform.rotation);
-        SceneManager.LoadScene("Game");
+       PhotonNetwork.Instantiate(myPlayer.name, myPlayer.transform.position, myPlayer.transform.rotation);
     }
     #endregion
 
