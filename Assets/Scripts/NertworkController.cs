@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.SceneManagement;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class NertworkController : MonoBehaviourPunCallbacks
 {
@@ -93,6 +94,7 @@ public class NertworkController : MonoBehaviourPunCallbacks
         HandleChangingWindows(windowConnection.Lobby, false);
         HandleChangingWindows(windowConnection.Canvas, false);
         HandleChangingWindows(windowConnection.Game, true);
+        CreateProperties();
         CreateNewPlayer();
         // SceneManager.LoadScene("Game");
 
@@ -196,8 +198,23 @@ public class NertworkController : MonoBehaviourPunCallbacks
 
     void CreateNewPlayer()
     {
-       PhotonNetwork.Instantiate(myPlayer.name, myPlayer.transform.position, myPlayer.transform.rotation);
+        GameObject temPlayer = PhotonNetwork.Instantiate(myPlayer.name, myPlayer.transform.position, myPlayer.transform.rotation, 0);
+        HandleChangingWindows(windowConnection.Canvas, false);
+        temPlayer.GetComponent<PlayerController>().myCanvas = GameWindow;
     }
     #endregion
+    #region Hashtable
 
+    void CreateProperties()
+    {
+        Hashtable playerTempData = new Hashtable();
+
+        playerTempData.Add("Name", PhotonNetwork.NickName);
+        playerTempData.Add("Score", 0);
+        playerTempData.Add("Id", PhotonNetwork.LocalPlayer.UserId);
+        playerTempData.Add("Team", "Blue");
+        PhotonNetwork.SetPlayerCustomProperties(playerTempData);
+    }
+
+    #endregion
 }

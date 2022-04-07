@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine.UI;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,32 +13,68 @@ public class PlayerController : MonoBehaviour
     Vector2 moveFinal;
     public float addVelocity = 2f;
     public float rmVelocity = 2f;
+    public GameObject myCanvas;
+
+    public Image lifeBar;
+    public float playerMaxLife = 100f;
+    float playerLife;
 
     public Rigidbody2D rb;
     Vector2 control;
-    PhotonView photonView;
+    public PhotonView photonView;
+
+    public GameObject bulletInstance;
+    public Transform bulletSpawnPoint;
+
+    public string playerNickName;
+
 
     
     // Start is called before the first frame update
     void Start()
     {
         photonView = GetComponent<PhotonView>();
+        playerLife = playerMaxLife;
+
+        playerLife = playerMaxLife;
+        playerNickName = photonView.Owner.NickName;
+
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
+       //funcao com erro UpdateCanvasScore();
+        
         if (photonView.IsMine)
         {
             MoveInput();
             IncreaseVelocity();
             DecreaseVelocity();
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Shoot();
+            }
+
         }
     }
 
     private void FixedUpdate()
     {
         MovePosition();
+    }
+
+    void UpdateCanvasScore()
+    {
+        object scorePLayer;
+
+        if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("Score", out scorePLayer) && myCanvas)
+        {
+            myCanvas.GetComponentInChildren<Text>().text = "Score " + (int)scorePLayer;
+        }
     }
 
     void MoveInput()
@@ -52,8 +90,16 @@ public class PlayerController : MonoBehaviour
 
         rb.MovePosition(rb.position + moveFinal * Time.fixedDeltaTime);
 
+    }
 
-        
+    public float MovimentoXGet()
+    {
+        return moveFinal.x;
+    }
+
+    public float MovimentoYGet()
+    {
+        return moveFinal.y;
     }
 
     void IncreaseVelocity()
@@ -116,7 +162,73 @@ public class PlayerController : MonoBehaviour
 
 
     }
+    void LifeManager(float value)
+    {
+        playerLife += value;
+        if (playerLife > playerMaxLife)
+            playerLife = playerMaxLife;
 
+        if (playerMaxLife < 0)
+            playerLife = 0;
+
+        lifeBar.fillAmount = playerLife / playerMaxLife;
+
+    }
+
+    private void Shoot()
+    {
+
+        object myId;
+        PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("Id", out myId);
+        photonView.RPC("ShootRPC", RpcTarget.All, (string)myId);
+    }
+
+    [PunRPC]
+    public void ShootRPC(string createrId)
+    {
+        GameObject tempBullet = Instantiate(bulletInstance, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
+        tempBullet.GetComponent<BulletController>().createrName = photonView.Owner.NickName;
+
+        tempBullet.GetComponent<BulletController>().createrId = createrId;
+    }
+
+
+    public void sufferDamage(float value, string createrId)
+    {
+        photonView.RPC("sufferDamagerRPC", RpcTarget.AllBuffered, value, createrId);
+    }
+
+    [PunRPC]
+    public void sufferDamagerRPC(float value, string createrId)
+    {
+        LifeManager(-value);
+        UpdateScorePlayer(createrId);
+    }
+
+    void UpdateScorePlayer(string playerId)
+    {
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            object id;
+
+            player.CustomProperties.TryGetValue("Id", out id);
+            
+            if ((string)id == playerId)
+            {
+                object scoreTemp;
+
+                player.CustomProperties.TryGetValue("Score", out scoreTemp);
+
+                int newScore = (int)scoreTemp + 50;
+
+                Hashtable playerTempData = new Hashtable();
+                playerTempData.Add("Score", newScore);
+                player.SetCustomProperties(playerTempData);
+
+
+            }
+        }
+    }
 
 
 }
