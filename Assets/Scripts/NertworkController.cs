@@ -10,6 +10,8 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class NertworkController : MonoBehaviourPunCallbacks
 {
+    public static NertworkController Instance { get; private set; }
+
     public InputField playerInputName;
     public InputField roomInputName;
     string playerNameTemp;
@@ -17,25 +19,37 @@ public class NertworkController : MonoBehaviourPunCallbacks
 
     public GameObject loginWindow;
     public GameObject lobbyWindow;
-    public GameObject CanvasWindow;
-    public GameObject GameWindow;
-    enum windowConnection {Login, Lobby, Game, Canvas};
+    
+    
+    enum windowConnection {Login, Lobby};
     enum statusConnection {EnteringLobby, EnterInLobby, EnterInLobbyFail}
     
     
     #region Aula 02
     bool isConected = false;
 
-    public GameObject myPlayer;
+    
 
+    
 
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+        DontDestroyOnLoad(this.gameObject);
+    }
 
     private void Start()
     {
         roomInputName.enabled = false;
         HandleChangingWindows(windowConnection.Login, true);
         HandleChangingWindows(windowConnection.Lobby, false);
-        HandleChangingWindows(windowConnection.Game, false);
         SetRandomPlayerName();
     }
 
@@ -92,11 +106,10 @@ public class NertworkController : MonoBehaviourPunCallbacks
        
         HandleChangingWindows(windowConnection.Login, false);
         HandleChangingWindows(windowConnection.Lobby, false);
-        HandleChangingWindows(windowConnection.Canvas, false);
-        HandleChangingWindows(windowConnection.Game, true);
-        CreateProperties();
-        CreateNewPlayer();
-        // SceneManager.LoadScene("Game");
+
+        Debug.Log("Estou aqui");
+        ChangeScene();
+
 
     }
 
@@ -182,39 +195,33 @@ public class NertworkController : MonoBehaviourPunCallbacks
                 if (lobbyWindow != null)
                     lobbyWindow.SetActive(value);
                 break;
-            
-            case windowConnection.Game:
-                GameWindow.SetActive(value);
-                break;
-
-            case windowConnection.Canvas:
-                CanvasWindow.SetActive(value);
-                break;
-
             default:
                 break;
         }
     }
 
-    void CreateNewPlayer()
-    {
-        GameObject temPlayer = PhotonNetwork.Instantiate(myPlayer.name, myPlayer.transform.position, myPlayer.transform.rotation, 0);
-        HandleChangingWindows(windowConnection.Canvas, false);
-        temPlayer.GetComponent<PlayerController>().myCanvas = GameWindow;
-    }
+    
     #endregion
     #region Hashtable
 
-    void CreateProperties()
-    {
-        Hashtable playerTempData = new Hashtable();
-
-        playerTempData.Add("Name", PhotonNetwork.NickName);
-        playerTempData.Add("Score", 0);
-        playerTempData.Add("Id", PhotonNetwork.LocalPlayer.UserId);
-        playerTempData.Add("Team", "Blue");
-        PhotonNetwork.SetPlayerCustomProperties(playerTempData);
-    }
+    
 
     #endregion
+
+    public void ChangeScene()
+    {
+        if (GetComponent<PhotonView>() != null)
+        {
+            GetComponent<PhotonView>().RPC("ChangeSceneRPC", RpcTarget.All);
+        }
+        else{
+            Debug.Log("Erro");
+        }
+    }
+
+    [PunRPC]
+    void ChangeSceneRPC()
+    {
+        PhotonNetwork.LoadLevel("Game");
+    }
 }

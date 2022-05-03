@@ -4,28 +4,28 @@ using UnityEngine;
 
 public class RotationDirection : MonoBehaviour
 {
-    
-    [SerializeField]  PlayerController move;
-    Transform tr;
-    [SerializeField] float offset = 90f;
 
-    // Start is called before the first frame update
-    void Start()
+    Transform tr;
+    [SerializeField] PlayerController plController;
+    [SerializeField] float rotationSpeed = 40f;
+
+    private void Start()
     {
         tr = transform;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        Rotation();
-    }
+        Vector3 movementDirection;
+        movementDirection.z = 0;
+        movementDirection.y = -plController.MovimentoYGet();
+        movementDirection.x = -plController.MovimentoXGet();
 
-    void Rotation()
-    {
-        if (move.MovimentoXGet() != 0 || move.MovimentoYGet() != 0) { 
-        float angle = Mathf.Atan2(move.MovimentoXGet(), move.MovimentoYGet()) * Mathf.Rad2Deg;
-        tr.rotation = Quaternion.AngleAxis(angle + offset,tr.forward);
+
+        if (movementDirection != Vector3.zero)
+        {
+            Quaternion toRotation = Quaternion.LookRotation(Vector3.forward, movementDirection);
+            tr.rotation = Quaternion.Slerp(tr.rotation, toRotation, Time.deltaTime * rotationSpeed);
         }
     }
 }

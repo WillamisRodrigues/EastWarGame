@@ -193,7 +193,7 @@ GameObject:
   - component: {fileID: 2144266216}
   - component: {fileID: 2144266215}
   m_Layer: 0
-  m_Name: Canvas
+  m_Name: LifePlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -296,14 +296,15 @@ GameObject:
   - component: {fileID: 6863502690122460628}
   - component: {fileID: 5279437471774946526}
   - component: {fileID: 8101338895525621337}
-  - component: {fileID: 549082676}
+  - component: {fileID: 5022337782037046739}
+  - component: {fileID: 2694445336093955453}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4371641944448084465
 Transform:
   m_ObjectHideFlags: 0
@@ -334,12 +335,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveCurrentV: 0
+  offsetToStopMovementCompletely: 0.5
   moveCurrentH: 0
-  addVelocity: 3.78
+  addVelocity: 2
   rmVelocity: 2
-  myCanvas: {fileID: 0}
-  lifeBar: {fileID: 1404406514}
-  playerMaxLife: 100
   rb: {fileID: 4371641944448084466}
   photonView: {fileID: 6863502690122460628}
   bulletInstance: {fileID: 3954659337331148008, guid: b7a0f323b6f42eb488a05429d7409f98, type: 3}
@@ -448,7 +447,7 @@ MonoBehaviour:
   m_SynchronizeAngularVelocity: 0
   m_TeleportEnabled: 0
   m_TeleportIfDistanceGreaterThan: 3
---- !u!114 &549082676
+--- !u!114 &5022337782037046739
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -457,11 +456,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 4371641944448084470}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1403d6c0a7ea44c43b7ead0929e7d10b, type: 3}
+  m_Script: {fileID: 11500000, guid: 507329dfc2abd4b44bc72f716e8e1744, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  move: {fileID: 4371641944448084464}
-  offset: 0
+--- !u!114 &2694445336093955453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4371641944448084470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bca8c149cb63a4f499729c404b2a3396, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lifeBar: {fileID: 1404406514}
+  playerMaxLife: 100
+  myCanvas: {fileID: 0}
 --- !u!1 &4371641944807861398
 GameObject:
   m_ObjectHideFlags: 0
@@ -569,6 +581,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4371641945043461950}
   - component: {fileID: 4371641945043461945}
+  - component: {fileID: 429883178}
   m_Layer: 0
   m_Name: tank-base
   m_TagString: Untagged
@@ -641,3 +654,17 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &429883178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4371641945043461951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1403d6c0a7ea44c43b7ead0929e7d10b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  plController: {fileID: 4371641944448084464}
+  rotationSpeed: 10

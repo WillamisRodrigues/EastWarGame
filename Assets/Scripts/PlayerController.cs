@@ -2,22 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
-using Photon.Realtime;
-using UnityEngine.UI;
-using Hashtable = ExitGames.Client.Photon.Hashtable;
+
 
 public class PlayerController : MonoBehaviour
 {
     public float moveCurrentV;
+    [SerializeField] 
+    float offsetToStopMovementCompletely = 0.5f;
     public float moveCurrentH;
     Vector2 moveFinal;
     public float addVelocity = 2f;
     public float rmVelocity = 2f;
-    public GameObject myCanvas;
+   
 
-    public Image lifeBar;
-    public float playerMaxLife = 100f;
-    float playerLife;
+   
 
     public Rigidbody2D rb;
     Vector2 control;
@@ -29,30 +27,30 @@ public class PlayerController : MonoBehaviour
     public string playerNickName;
 
 
+
     
     // Start is called before the first frame update
     void Start()
     {
         photonView = GetComponent<PhotonView>();
-        playerLife = playerMaxLife;
-
-        playerLife = playerMaxLife;
+        
         playerNickName = photonView.Owner.NickName;
-
 
 
     }
 
+
     // Update is called once per frame
     void Update()
     {
-       //funcao com erro UpdateCanvasScore();
+       
         
         if (photonView.IsMine)
         {
             MoveInput();
             IncreaseVelocity();
             DecreaseVelocity();
+            OffsetToStop();
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
@@ -67,15 +65,7 @@ public class PlayerController : MonoBehaviour
         MovePosition();
     }
 
-    void UpdateCanvasScore()
-    {
-        object scorePLayer;
-
-        if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("Score", out scorePLayer) && myCanvas)
-        {
-            myCanvas.GetComponentInChildren<Text>().text = "Score " + (int)scorePLayer;
-        }
-    }
+   
 
     void MoveInput()
     {
@@ -162,18 +152,7 @@ public class PlayerController : MonoBehaviour
 
 
     }
-    void LifeManager(float value)
-    {
-        playerLife += value;
-        if (playerLife > playerMaxLife)
-            playerLife = playerMaxLife;
-
-        if (playerMaxLife < 0)
-            playerLife = 0;
-
-        lifeBar.fillAmount = playerLife / playerMaxLife;
-
-    }
+    
 
     private void Shoot()
     {
@@ -198,34 +177,29 @@ public class PlayerController : MonoBehaviour
         photonView.RPC("sufferDamagerRPC", RpcTarget.AllBuffered, value, createrId);
     }
 
-    [PunRPC]
-    public void sufferDamagerRPC(float value, string createrId)
-    {
-        LifeManager(-value);
-        UpdateScorePlayer(createrId);
-    }
+    
 
-    void UpdateScorePlayer(string playerId)
+    
+
+   
+    void OffsetToStop()
     {
-        foreach (Player player in PhotonNetwork.PlayerList)
+        //se não pressionar para horizontal e está no offset para parar completamente
+        if (control.x == 0)
         {
-            object id;
-
-            player.CustomProperties.TryGetValue("Id", out id);
-            
-            if ((string)id == playerId)
+            if (moveCurrentH < offsetToStopMovementCompletely && moveCurrentH > -offsetToStopMovementCompletely)
             {
-                object scoreTemp;
+                moveCurrentH = 0;
+            }
 
-                player.CustomProperties.TryGetValue("Score", out scoreTemp);
+        }
 
-                int newScore = (int)scoreTemp + 50;
-
-                Hashtable playerTempData = new Hashtable();
-                playerTempData.Add("Score", newScore);
-                player.SetCustomProperties(playerTempData);
-
-
+        //se não pressionar para vertical e está no offset para parar completamente
+        if (control.y == 0)
+        {
+            if (moveCurrentV < offsetToStopMovementCompletely && moveCurrentV > -offsetToStopMovementCompletely)
+            {
+                moveCurrentV = 0;
             }
         }
     }
