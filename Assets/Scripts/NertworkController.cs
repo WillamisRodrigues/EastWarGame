@@ -108,7 +108,9 @@ public class NertworkController : MonoBehaviourPunCallbacks
         HandleChangingWindows(windowConnection.Lobby, false);
 
         Debug.Log("Estou aqui");
-        ChangeScene();
+        //ChangeScene();
+
+        GetComponent<PhotonView>().RPC("EntrarSala", RpcTarget.MasterClient);
 
 
     }
@@ -213,11 +215,23 @@ public class NertworkController : MonoBehaviourPunCallbacks
         if (GetComponent<PhotonView>() != null)
         {
             GetComponent<PhotonView>().RPC("ChangeSceneRPC", RpcTarget.All);
+            //ChangeSceneRPC();
         }
         else{
             Debug.Log("Erro");
         }
     }
+
+    [PunRPC]
+    void EntrarSala()
+    {
+        if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
+        {
+            ChangeScene();
+        }
+    }
+
+
 
     [PunRPC]
     void ChangeSceneRPC()
