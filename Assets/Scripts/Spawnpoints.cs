@@ -12,7 +12,7 @@ public class Spawnpoints : MonoBehaviour
     bool PlayerCheck = true;
 
     [SerializeField]
-    public GameObject GameWindow;
+    //public GameObject GameWindow;
     public PhotonView photonView;
 
     // Start is called before the first frame update
@@ -46,7 +46,7 @@ public class Spawnpoints : MonoBehaviour
             if(PlayerCheck == true) { 
 
             GameObject temPlayer = PhotonNetwork.Instantiate(myPlayer.name, spawnPoint.position, spawnPoint.rotation, 0);
-                temPlayer.GetComponent<LifeMenager>().myCanvas = GameWindow;
+              // temPlayer.GetComponent<LifeMenager>().myCanvas = GameWindow;
                 PlayerCheck = false;
             }
 

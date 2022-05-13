@@ -11,24 +11,22 @@ public class LifeMenager : MonoBehaviour
     public Image lifeBar;
     public float playerMaxLife = 100f;
     float playerLife;
-    public GameObject myCanvas;
+    
+    int scorePLayer;
+
+    [SerializeField]
+    Text pontos;
+
 
     // Start is called before the first frame update
     void Start()
     {
+
         playerLife = playerMaxLife;
-        CreateProperties();
+       CreateProperties();
         playerLife = playerMaxLife;
 
-        if (GameObject.FindGameObjectWithTag("GameScene"))
-        {
-            myCanvas = GameObject.FindGameObjectWithTag("GameScene");
-        }
-        else
-        {
-            Debug.Log(myCanvas);
-            Debug.Log("Erro");
-        }
+
         
     }
 
@@ -53,23 +51,39 @@ public class LifeMenager : MonoBehaviour
 
     void UpdateCanvasScore()
     {
-        object scorePLayer;
+        
 
         if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("Score", out scorePLayer) && myCanvas)
         {
 
-            myCanvas.GetComponent<Text>().text = "Score: " + (int)scorePLayer;
+            myCanvas.GetComponent<Text>().text = "Score: " +  scorePLayer;
+
+           
         }
+    } 
+
+  /* void UpdateCanvasScore()
+    {
+        if(pontos != null)
+        pontos.text = "Score: " + scorePLayer;
+    } */
+
+    public int GetPontos()
+    {
+        return scorePLayer ;
+        //mostrar pontos verificar
     }
 
     [PunRPC]
     public void sufferDamagerRPC(float value, string createrId)
     {
         LifeManager(-value);
-        UpdateScorePlayer(createrId);
+       UpdateScorePlayer(createrId);
     }
 
-    void UpdateScorePlayer(string playerId)
+
+
+   void UpdateScorePlayer(string playerId)
     {
         foreach (Player player in PhotonNetwork.PlayerList)
         {
@@ -104,5 +118,6 @@ public class LifeMenager : MonoBehaviour
         playerTempData.Add("Team", "Blue");
         PhotonNetwork.SetPlayerCustomProperties(playerTempData);
     }
+
 
 }

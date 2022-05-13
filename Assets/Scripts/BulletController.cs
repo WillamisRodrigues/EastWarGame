@@ -59,7 +59,7 @@ public class BulletController : MonoBehaviour
         {
             if (quemColidiu.collider.CompareTag("Parede"))
             {
-                Debug.Log(quemColidiu.collider.name);
+               // Debug.Log(quemColidiu.collider.name);
                 Destroy(this.gameObject);
             }
         }

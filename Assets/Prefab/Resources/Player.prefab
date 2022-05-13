@@ -298,6 +298,7 @@ GameObject:
   - component: {fileID: 8101338895525621337}
   - component: {fileID: 5022337782037046739}
   - component: {fileID: 2694445336093955453}
+  - component: {fileID: 8007291544329470938}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -473,7 +474,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifeBar: {fileID: 1404406514}
   playerMaxLife: 100
-  myCanvas: {fileID: 0}
+  pontos: {fileID: 0}
+--- !u!114 &8007291544329470938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4371641944448084470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fec4ec76a1cc4764cb7a100a839a17f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  photonView: {fileID: 6863502690122460628}
+  life: {fileID: 2694445336093955453}
 --- !u!1 &4371641944807861398
 GameObject:
   m_ObjectHideFlags: 0

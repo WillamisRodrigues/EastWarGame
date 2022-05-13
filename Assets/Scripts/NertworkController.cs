@@ -225,10 +225,8 @@ public class NertworkController : MonoBehaviourPunCallbacks
     [PunRPC]
     void EntrarSala()
     {
-        if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
-        {
+       
             ChangeScene();
-        }
     }
 
 
