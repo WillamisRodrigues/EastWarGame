@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
+using Photon.Realtime;
 
 public class MenuInGame : MonoBehaviour
 {
@@ -12,7 +14,7 @@ public class MenuInGame : MonoBehaviour
     Text pontos;
     
     [SerializeField]
-    LifeMenager playerPontos ;
+    LifeMenager playerLife;
 
     // Start is called before the first frame update
     void Start()
@@ -26,17 +28,41 @@ public class MenuInGame : MonoBehaviour
     {
         if (pontos != null)
         {
-            if (playerPontos.GetPontos() >= 100)
-            {
-                MenuVitoria.SetActive(true);
-            }
-               pontos.text = playerPontos.GetPontos().ToString();
+              pontos.text = playerLife.GetPontos().ToString();
         }
+
+       
             
     }
 
     public void SetLife(LifeMenager lifeMen)
     {
-        playerPontos = lifeMen;
+        playerLife = lifeMen;
+    }
+
+    public void MenuVit(bool menu)
+    {
+        if (menu)
+        {
+            MenuVitoria.SetActive(true);
+        }
+        else
+        {
+            MenuVitoria.SetActive(false);
+        }
+            
+    }
+
+    public void MenuDer(bool menu)
+    {
+        if (menu)
+        {
+            MenuDerrota.SetActive(true);
+        }
+        else
+        {
+            MenuDerrota.SetActive(false);
+        }
+
     }
 }

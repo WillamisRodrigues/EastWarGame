@@ -301,7 +301,7 @@ GameObject:
   - component: {fileID: 8007291544329470938}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -474,6 +474,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifeBar: {fileID: 1404406514}
   playerMaxLife: 100
+  playerLife: 0
+  photonView: {fileID: 6863502690122460628}
   pontos: {fileID: 0}
 --- !u!114 &8007291544329470938
 MonoBehaviour:

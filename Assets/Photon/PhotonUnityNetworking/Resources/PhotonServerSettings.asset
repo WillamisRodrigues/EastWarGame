@@ -45,6 +45,10 @@ MonoBehaviour:
   - DestroyBullet
   - ChangeSceneRPC
   - EntrarSala
+  - DestroyParedeRPC
+  - DanoRPC
+  - chamarMenu
+  - chamaMenu
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

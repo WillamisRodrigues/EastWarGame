@@ -57,9 +57,14 @@ public class BulletController : MonoBehaviour
         }
         else
         {
-            if (quemColidiu.collider.CompareTag("Parede"))
+
+            if (quemColidiu.collider.CompareTag("Parede") && quemColidiu != null)
             {
-               // Debug.Log(quemColidiu.collider.name);
+                if(quemColidiu.gameObject.GetComponent<LifeMenager>()){
+                    quemColidiu.gameObject.GetComponent<LifeMenager>().sufferDamagerRPC(10f, "");
+                }
+             
+                // Debug.Log(quemColidiu.collider.name);
                 Destroy(this.gameObject);
             }
         }
