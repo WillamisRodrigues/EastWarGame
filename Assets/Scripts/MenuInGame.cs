@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine.SceneManagement;
 
 public class MenuInGame : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class MenuInGame : MonoBehaviour
     {
         MenuVitoria.SetActive(false);
         MenuDerrota.SetActive(false);
+       
     }
 
     // Update is called once per frame
@@ -64,5 +66,19 @@ public class MenuInGame : MonoBehaviour
             MenuDerrota.SetActive(false);
         }
 
+    }
+
+    public void ClickReturn()
+    {
+        
+      GetComponent<PhotonView>().RPC("returnMenuPrincipal", RpcTarget.All);
+        
+    }
+
+    [PunRPC]
+    public void returnMenuPrincipal()
+    {
+        //PhotonNetwork.Disconnect();
+        PhotonNetwork.LoadLevel("Menu");
     }
 }
