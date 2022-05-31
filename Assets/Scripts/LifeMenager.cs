@@ -24,15 +24,14 @@ public class LifeMenager : MonoBehaviour
 
     Hashtable playerTempData = new Hashtable();
 
-
     // Start is called before the first frame update
     void Start()
     {
 
         playerLife = playerMaxLife;
-       CreateProperties();
+        CreateProperties();
 
-        if(photonView != null)
+        if (photonView != null)
         {
             if (photonView.IsMine)
             {
@@ -42,7 +41,6 @@ public class LifeMenager : MonoBehaviour
                 }
             }
         }
-       
 
     }
 
@@ -50,23 +48,21 @@ public class LifeMenager : MonoBehaviour
     void Update()
     {
         UpdateCanvasScore();
-        
     }
 
     void LifeManager(float value)
     {
-
         photonView.RPC("DanoRPC", RpcTarget.AllBuffered, value);
 
         if (playerLife <= 0)
         {
             photonView.RPC("DestroyParedeRPC", RpcTarget.AllBuffered);
-            photonView.RPC("chamaMenu", RpcTarget.AllBuffered);
 
+            if (gameObject.CompareTag("Player"))
+            {
+                photonView.RPC("chamaMenu", RpcTarget.All);
+            }
         }
-
-
-       
 
     }
 
@@ -76,7 +72,7 @@ public class LifeMenager : MonoBehaviour
         Destroy(this.gameObject);
     }
     [PunRPC]
-    void DanoRPC( float value)
+    void DanoRPC(float value)
     {
         playerLife += value;
         if (playerLife > playerMaxLife)
@@ -88,56 +84,29 @@ public class LifeMenager : MonoBehaviour
         lifeBar.fillAmount = playerLife / playerMaxLife;
     }
 
-    
     [PunRPC]
     void chamaMenu()
     {
-        Menu();
+        Menu(photonView.IsMine);
     }
 
-
-
-    void Menu()
+    void Menu(bool perdi)
     {
-        if(photonView != null) {
-
-            if (photonView.IsMine)
+  
+        if (photonView != null)
+        {
+            MenuInGame menu = FindObjectOfType<MenuInGame>();
+            if (menu != null)
             {
-                if (gameObject.CompareTag("Player"))
-                {
-                    if (playerLife <= 0)
-                    {
-                        if (GameObject.FindObjectOfType<MenuInGame>())
-                        {
-                            GameObject.FindObjectOfType<MenuInGame>().GetComponent<MenuInGame>().MenuDer(true);
-                        }
-                    }
-
-                    if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("Score", out scorePLayer))
-                    {
-                        if ((int)scorePLayer >= 300)
-                        {
-                            if (GameObject.FindObjectOfType<MenuInGame>())
-                            {
-                                GameObject.FindObjectOfType<MenuInGame>().GetComponent<MenuInGame>().MenuVit(true);
-                            }
-                        }
-                    }
-                }
-                   
-
+                menu.OpenMenuEndGame(perdi);
             }
-
         }
-           
 
-            
-        
     }
+
 
     public float GetLife()
     {
-        
         return playerLife;
     }
 
@@ -151,41 +120,31 @@ public class LifeMenager : MonoBehaviour
 
     void UpdateCanvasScore()
     {
-        if(photonView != null)
+        if (photonView != null)
         {
             if (photonView.IsMine)
             {
 
                 if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("Score", out scorePLayer))
                 {
-
                     pontos.text = "Score: " + scorePLayer;
-
-
                 }
             }
         }
-        
-    } 
-
-
-  
+    }
 
     [PunRPC]
     public void sufferDamagerRPC(float value, string createrId)
     {
         LifeManager(-value);
 
-        if(createrId != "")
+        if (createrId != "")
         {
             UpdateScorePlayer(createrId);
         }
-      
     }
 
-
-
-   void UpdateScorePlayer(string playerId)
+    void UpdateScorePlayer(string playerId)
     {
         foreach (Player player in PhotonNetwork.PlayerList)
         {
@@ -205,14 +164,12 @@ public class LifeMenager : MonoBehaviour
                 playerTempData.Add("Score", newScore);
                 player.SetCustomProperties(playerTempData);
 
-
             }
         }
     }
 
     void CreateProperties()
     {
-       
 
         playerTempData.Add("Name", PhotonNetwork.NickName);
         playerTempData.Add("Score", 0);
@@ -220,6 +177,5 @@ public class LifeMenager : MonoBehaviour
         playerTempData.Add("Team", "Blue");
         PhotonNetwork.SetPlayerCustomProperties(playerTempData);
     }
-
 
 }

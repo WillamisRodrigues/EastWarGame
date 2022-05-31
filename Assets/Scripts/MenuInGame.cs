@@ -10,10 +10,10 @@ public class MenuInGame : MonoBehaviour
 {
     public GameObject MenuVitoria;
     public GameObject MenuDerrota;
+    bool endgame;
 
     [SerializeField]
     Text pontos;
-    
     [SerializeField]
     LifeMenager playerLife;
 
@@ -22,7 +22,7 @@ public class MenuInGame : MonoBehaviour
     {
         MenuVitoria.SetActive(false);
         MenuDerrota.SetActive(false);
-       
+        endgame = false;
     }
 
     // Update is called once per frame
@@ -30,11 +30,10 @@ public class MenuInGame : MonoBehaviour
     {
         if (pontos != null)
         {
-              pontos.text = playerLife.GetPontos().ToString();
+            pontos.text = playerLife.GetPontos().ToString();
         }
 
-       
-            
+
     }
 
     public void SetLife(LifeMenager lifeMen)
@@ -42,43 +41,16 @@ public class MenuInGame : MonoBehaviour
         playerLife = lifeMen;
     }
 
-    public void MenuVit(bool menu)
-    {
-        if (menu)
-        {
-            MenuVitoria.SetActive(true);
-        }
-        else
-        {
-            MenuVitoria.SetActive(false);
-        }
-            
-    }
 
-    public void MenuDer(bool menu)
+    public void OpenMenuEndGame(bool loose)
     {
-        if (menu)
-        {
-            MenuDerrota.SetActive(true);
-        }
-        else
-        {
-            MenuDerrota.SetActive(false);
-        }
-
+        MenuDerrota.SetActive(loose);
+        MenuVitoria.SetActive(!loose);
     }
 
     public void ClickReturn()
     {
-        
-      GetComponent<PhotonView>().RPC("returnMenuPrincipal", RpcTarget.All);
-        
+        Application.Quit();
     }
 
-    [PunRPC]
-    public void returnMenuPrincipal()
-    {
-        //PhotonNetwork.Disconnect();
-        PhotonNetwork.LoadLevel("Menu");
-    }
 }
